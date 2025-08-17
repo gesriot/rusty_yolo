@@ -2,15 +2,15 @@
 <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License">
 
 
-# 🚀 Rust-YOLO: Real-time Object Detection with ONNX Runtime
+# Rust-YOLO: Real-time Object Detection with ONNX Runtime
 
 **Rust-ядро YOLOv8 для Python с ускорением ONNX Runtime**  
 Детекция объектов в реальном времени на Rust + PyO3 с минимальными задержками
 
 
 
-## 🔥 Особенности
-- **Супер-производительность**: Rust-обработка кадров + ONNX Runtime
+## Особенности
+- **Производительность**: Rust-обработка кадров + ONNX Runtime
 - **Python-интеграция**: Простой API через PyO3 (чтобы не запариваться с компиляцией OpenCV)
 - **Готовые модели**: Поддержка YOLOv8 (позже v11)
 - **Оптимизации**: 
@@ -18,7 +18,7 @@
   - Release GIL во время инференса
   - Автоматический NMS и препроцессинг
 
-## ⚙️ Установка
+## Установка
 1. **Предварительные требования**:
 ```bash
 # Помимо установленного Rust, нужны Python-зависимости (позже будет автоматически)
@@ -36,14 +36,13 @@ export YOLO_MODEL="путь/к/yolov8n.onnx"
 cargo build --release  # Сборка Rust-библиотеки
 ```
 
-## 🚀 Использование
+## Использование
 ```bash
 cargo run --release -- video.mp4
 ```
 
-## 🏗️ Структура проекта
+## Структура проекта
 ```bash
-.
 ├── Cargo.toml           
 ├── src/
 │   ├── detector.rs      # Ядро YOLO (пре/пост-процессинг + NMS)
@@ -53,7 +52,7 @@ cargo run --release -- video.mp4
     └── video_io.py      # Отрисовка с помощью OpenCV (встроен в бинарник)
 ```
 
-## ⚡️ Производительность
+## Производительность
 На RTX 3080 (YOLOv8n 640×640):
 | Компонент | FPS (Rust) | FPS (Pure Python) |
 |-----------|------------|-------------------|
@@ -61,13 +60,13 @@ cargo run --release -- video.mp4
 | Инференс | 155 | 140 |
 | NMS | 8800 | 1200 |
 
-## 🔧 Кастомизация
+## Кастомизация
 
 **Настройка порога детекции**:
 ```rust
 // Измените 0.5 в postprocess()
 if best_conf > 0.7 { ... }
 ```
-## 📄 Лицензия
+## Лицензия
 
 Проект распространяется под лицензией MIT. Подробнее см. в файле [LICENSE](LICENSE).

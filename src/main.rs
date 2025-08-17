@@ -1,5 +1,3 @@
-//! Rust управляет Python-циклом OpenCV
-
 mod detector;
 
 use anyhow::{anyhow, Result};
@@ -17,10 +15,8 @@ fn main() -> Result<()> {
 
     //──────────── Python + OpenCV цикл ──────────
     Python::with_gil(|py| -> Result<()> {
-        // Регистрируем Rust-модуль
         detector::init_python_module(py)?;
 
-        // Загружаем embedded-скрипт video_io.py
         let code = include_str!("py/video_io.py");
         let video_io = PyModule::from_code(py, code, "video_io.py", "video_io")
             .map_err(|e| anyhow!("Не удалось создать Python-модуль: {}", e))?;

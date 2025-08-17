@@ -7,7 +7,7 @@ import queue
 import numpy as np
 import rusty_yolo
 
-# Очереди для кадров и результатов
+# очереди для кадров и результатов
 frame_queue = queue.Queue(maxsize=1)
 det_queue = queue.Queue(maxsize=1)
 stop_event = threading.Event()
@@ -24,7 +24,7 @@ def inference_worker():
         except Exception as e:
             print(f"[ERROR][Inference] {e}")
             detections = []
-        # Кладём последний результат
+        # кладём последний результат
         if not det_queue.full():
             det_queue.put(detections)
         else:
@@ -37,7 +37,7 @@ def run(video_path: str) -> None:
     if not cap.isOpened():
         raise RuntimeError(f"Не удалось открыть видео: {video_path}")
 
-    # Запуск потока инференса
+    # запуск потока инференса
     worker = threading.Thread(target=inference_worker, daemon=True)
     worker.start()
 
@@ -52,20 +52,20 @@ def run(video_path: str) -> None:
             break
         frame_count += 1
 
-        # Отправляем последний кадр на инференс (non-blocking)
+        # отправляем последний кадр на инференс (non-blocking)
         if not frame_queue.full():
             frame_queue.put(frame_bgr)
         else:
             _ = frame_queue.get_nowait()
             frame_queue.put(frame_bgr)
 
-        # Получаем последний результат, если есть
+        # получаем последний результат, если есть
         try:
             detections = det_queue.get_nowait()
         except queue.Empty:
             detections = []
 
-        # Рисуем bbox'ы
+        # рисуем bbox'ы
         draw = frame_bgr.copy()
         h0, w0 = draw.shape[:2]
         for x, y, w, h, conf, cls in detections:
@@ -77,7 +77,7 @@ def run(video_path: str) -> None:
             cv2.rectangle(draw, (x1, y1), (x2, y2), (0,255,0), 2)
             cv2.putText(draw, f"{cls} {conf:.2f}", (x1, y1-5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,0), 2)
 
-        # Вывод FPS
+        # вывод FPS
         elapsed = time.time() - start_time
         fps = frame_count / elapsed if elapsed>0 else 0
         cv2.putText(draw, f"FPS: {fps:.2f}", (10,20), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255), 2)

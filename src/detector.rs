@@ -15,7 +15,7 @@ use std::sync::Mutex;
 pub type DetectResult = (f32, f32, f32, f32, f32, String);
 pub type Detections = Vec<DetectResult>;
 
-/// Bounding-box + метаданные
+/// bounding-box + метаданные
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Detection {
     pub x: f32,
@@ -27,91 +27,18 @@ pub struct Detection {
     pub class_name: String,
 }
 
-/// Классы COCO
+/// классы COCO
 const COCO_CLASSES: [&str; 80] = [
-    "person",
-    "bicycle",
-    "car",
-    "motorcycle",
-    "airplane",
-    "bus",
-    "train",
-    "truck",
-    "boat",
-    "traffic light",
-    "fire hydrant",
-    "stop sign",
-    "parking meter",
-    "bench",
-    "bird",
-    "cat",
-    "dog",
-    "horse",
-    "sheep",
-    "cow",
-    "elephant",
-    "bear",
-    "zebra",
-    "giraffe",
-    "backpack",
-    "umbrella",
-    "handbag",
-    "tie",
-    "suitcase",
-    "frisbee",
-    "skis",
-    "snowboard",
-    "sports ball",
-    "kite",
-    "baseball bat",
-    "baseball glove",
-    "skateboard",
-    "surfboard",
-    "tennis racket",
-    "bottle",
-    "wine glass",
-    "cup",
-    "fork",
-    "knife",
-    "spoon",
-    "bowl",
-    "banana",
-    "apple",
-    "sandwich",
-    "orange",
-    "broccoli",
-    "carrot",
-    "hot dog",
-    "pizza",
-    "donut",
-    "cake",
-    "chair",
-    "couch",
-    "potted plant",
-    "bed",
-    "dining table",
-    "toilet",
-    "tv",
-    "laptop",
-    "mouse",
-    "remote",
-    "keyboard",
-    "cell phone",
-    "microwave",
-    "oven",
-    "toaster",
-    "sink",
-    "refrigerator",
-    "book",
-    "clock",
-    "vase",
-    "scissors",
-    "teddy bear",
-    "hair drier",
-    "toothbrush",
+    "person", "bicycle", "car", "motorcycle", "airplane", "bus", "train", "truck", "boat", "traffic light", "fire hydrant", "stop sign",
+    "parking meter", "bench", "bird", "cat", "dog", "horse", "sheep", "cow", "elephant", "bear", "zebra", "giraffe", "backpack", "umbrella",
+    "handbag", "tie", "suitcase", "frisbee", "skis", "snowboard", "sports ball", "kite", "baseball bat", "baseball glove", "skateboard",
+    "surfboard", "tennis racket", "bottle", "wine glass", "cup", "fork", "knife", "spoon", "bowl", "banana", "apple", "sandwich", "orange",
+    "broccoli", "carrot", "hot dog", "pizza", "donut", "cake", "chair", "couch", "potted plant", "bed", "dining table", "toilet", "tv",
+    "laptop", "mouse", "remote", "keyboard", "cell phone", "microwave", "oven", "toaster", "sink", "refrigerator", "book", "clock", "vase",
+    "scissors", "teddy bear", "hair drier", "toothbrush",
 ];
 
-/// Обёртка над сессией ORT
+/// обёртка над сессией ORT
 pub struct YoloDetector {
     session: Session,
     iw: usize,
@@ -227,7 +154,7 @@ impl YoloDetector {
     }
 }
 
-// Глобальный singleton детектора
+// глобальный singleton детектора
 static DETECTOR: OnceCell<Mutex<YoloDetector>> = OnceCell::new();
 
 fn get_detector() -> Result<&'static Mutex<YoloDetector>> {
@@ -276,7 +203,6 @@ fn detect(py: Python, frame: &PyAny) -> PyResult<Detections> {
         .collect())
 }
 
-/// Регистрация модуля
 pub fn init_python_module(py: Python) -> PyResult<()> {
     let m = PyModule::new(py, "rusty_yolo")?;
     m.add_function(wrap_pyfunction!(detect, m)?)?;
